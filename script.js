@@ -13,15 +13,28 @@
   const preloader = document.getElementById('preloader');
   if (!preloader) return;
 
-  window.addEventListener('load', () => {
+  const startTime = Date.now();
+  const minDuration = 1500;
+
+  function hidePreloader() {
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, minDuration - elapsed);
+    
     setTimeout(() => {
       preloader.classList.add('hidden');
       document.body.style.overflow = '';
-    }, 500);
-  });
+    }, remaining);
+  }
 
-  // Safety: remove after 3s even if load never fires
-  setTimeout(() => preloader.classList.add('hidden'), 3000);
+  window.addEventListener('load', hidePreloader);
+
+  // Safety: remove after 12s even if load never fires
+  setTimeout(() => {
+    if (!preloader.classList.contains('hidden')) {
+      preloader.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }, 12000);
 })();
 
 

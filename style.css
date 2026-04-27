@@ -60,22 +60,23 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: radial-gradient(circle at center, var(--dark-soft), var(--dark));
   display: flex; align-items: center; justify-content: center;
   z-index: 9999;
-  transition: opacity 0.8s ease, visibility 0.8s ease;
-  backdrop-filter: blur(20px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+  /* Removed backdrop-filter for performance: it causes significant lag with custom cursor */
 }
 #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 .preloader-inner { text-align: center; display: flex; flex-direction: column; align-items: center; }
 .preloader-logo-wrap {
-  width: 160px; height: 160px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.03);
-  box-shadow: 0 0 40px rgba(204, 167, 69, 0.2), inset 0 0 20px rgba(255,255,255,0.05);
+  width: 180px; height: 120px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(255,255,255,0.05);
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 30px;
   border: 1px solid rgba(255,255,255,0.1);
   animation: floatLogo 3s ease-in-out infinite;
+  will-change: transform;
 }
-.preloader-logo-img { width: 110px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+.preloader-logo-img { width: 140px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
 .preloader-text {
   margin-top: 20px; font-family: var(--font-serif);
   font-size: 1.4rem; letter-spacing: 0.3em;
@@ -85,11 +86,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   animation: shineText 2s linear infinite;
 }
 .preloader-bar { width: 220px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; position: relative; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
-.preloader-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--terra), var(--gold-light)); border-radius: 4px; animation: loadBar 2s cubic-bezier(0.8, 0, 0.2, 1) forwards; }
+.preloader-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--terra), var(--gold-light)); border-radius: 4px; animation: loadBar 8s cubic-bezier(0.1, 0, 0.2, 1) forwards; }
 
-@keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+@keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 @keyframes shineText { to { background-position: 200% center; } }
-@keyframes loadBar { 0% { width: 0; } 50% { width: 60%; } 100% { width: 100%; } }
+@keyframes loadBar { 0% { width: 0; } 50% { width: 70%; } 100% { width: 100%; } }
 
 /* ── UTILITY & GLASSMORPHISM ────────────────────── */
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
@@ -227,22 +228,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* VERY ATTRACTIVE LOGO SECTION */
 .nav-brand {
-  display: flex; align-items: center; gap: 14px;
-  position: relative; group; text-decoration: none;
+  display: flex; align-items: center;
+  position: relative; text-decoration: none;
 }
-.nav-logo-icon {
-  width: 54px; height: 54px;
-  background: radial-gradient(circle at top left, rgba(255,255,255,0.1), transparent);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,255,255,0.05);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-  overflow: hidden;
-}
-.nav-logo-icon img { width: 40px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); transition: transform 0.5s ease; }
-.nav-brand:hover .nav-logo-icon { transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 25px rgba(204,167,69,0.25), inset 0 0 15px rgba(255,255,255,0.1); border-color: rgba(204,167,69,0.4); }
-.nav-brand:hover .nav-logo-icon img { transform: scale(1.1); }
 
 .nav-logo-text { display: flex; flex-direction: column; justify-content: center; line-height: 1.1; }
 .logo-main {
@@ -260,8 +248,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .nav-brand:hover .logo-main { background: linear-gradient(to right, var(--gold-light), #fff); -webkit-background-clip: text; color: transparent; filter: drop-shadow(0 0 8px rgba(204,167,69,0.4)); }
 .nav-brand:hover .logo-sub { color: var(--gold); }
 
-#navbar.scrolled .nav-logo-icon { width: 46px; height: 46px; }
-#navbar.scrolled .nav-logo-icon img { width: 34px; }
+#navbar.scrolled .logo-main { font-size: 1.2rem; }
 #navbar.scrolled .logo-main { font-size: 1.2rem; }
 
 .nav-links { display: flex; align-items: center; gap: 8px; }
@@ -320,6 +307,37 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.hero-logo {
+  width: 200px;
+  height: 120px;
+  margin-bottom: 30px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 40px rgba(204, 167, 69, 0.3), inset 0 0 20px rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+.hero-logo:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 0 0 60px rgba(204, 167, 69, 0.5), inset 0 0 30px rgba(255,255,255,0.2);
+  border-color: rgba(204, 167, 69, 0.5);
+}
+
+.hero-logo img {
+  width: 165px;
+  filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4));
+  transition: transform 0.5s ease;
+}
+
+.hero-logo:hover img {
+  transform: scale(1.1);
 }
 
 .hero-tag {
@@ -528,7 +546,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .footer-top { padding: 80px 0 50px; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 60px; }
 .drop-glow { filter: drop-shadow(0 0 15px rgba(255,255,255,0.15)); }
-.footer-logo { height: 80px; margin-bottom: 24px; transition: transform 0.5s ease; }
+.footer-logo { height: 175px; margin-bottom: 24px; transition: transform 0.5s ease; }
 .footer-logo:hover { transform: scale(1.05); }
 .footer-brand p { font-size: 0.95rem; color: rgba(255,255,255,0.5); line-height: 1.9; max-width: 340px; }
 .footer-links h4, .footer-contact h4 { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 24px; }
@@ -706,10 +724,10 @@ a, button, .gallery-item, input, textarea {
 }
 @media (max-width: 768px) {
   .nav-brand { gap: 10px; }
-  .nav-logo-icon { width: 44px; height: 44px; }
-  .nav-logo-icon img { width: 32px; }
   .logo-main { font-size: 1.1rem; }
   .logo-sub { font-size: 0.55rem; }
+  .hero-logo { width: 100px; height: 100px; margin-bottom: 24px; }
+  .hero-logo img { width: 75px; }
   .nav-links { display: none; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(12,18,11,0.95); backdrop-filter: blur(20px); justify-content: center; align-items: center; gap: 16px; z-index: 999; }
   .nav-links.open { display: flex; }
   .nav-link { font-size: 1.3rem; padding: 12px 24px; }
