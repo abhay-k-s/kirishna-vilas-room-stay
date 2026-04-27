@@ -340,6 +340,7 @@
   const nameInput = document.getElementById('name');
   const phoneInput = document.getElementById('phone');
   const messageInput = document.getElementById('message');
+  const submitBtn = form.querySelector('button[type="submit"]');
 
   function showError(id, msg) {
     const el = document.getElementById(id);
@@ -371,16 +372,41 @@
 
     if (!valid) return;
 
+    // Show loading state
+    const originalBtnContent = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Redirecting...';
+
     const text = encodeURIComponent(
-      `Hello, I would like to enquire about a stay at Krishna Vilas Homestay.\n\n` +
-      `Name: ${name}\n` +
-      `Phone: ${phone}\n` +
-      (dates ? `Preferred Dates: ${dates}\n` : '') +
-      `Message: ${message}`
+      `*New Enquiry - Krishna Vilas*\n\n` +
+      `*Name:* ${name}\n` +
+      `*Phone:* ${phone}\n` +
+      (dates ? `*Dates:* ${dates}\n` : '') +
+      `*Message:* ${message}\n\n` +
+      `_Sent via website contact form_`
     );
 
-    window.open(`https://wa.me/918075870149?text=${text}`, '_blank', 'noopener');
-    form.reset();
+    const whatsappUrl = `https://wa.me/918075870149?text=${text}`;
+
+    // Small delay for better UX
+    setTimeout(() => {
+      window.open(whatsappUrl, '_blank', 'noopener');
+      
+      // Transition to success state
+      form.style.opacity = '0';
+      setTimeout(() => {
+        form.innerHTML = `
+          <div class="form-success text-center">
+            <div class="success-icon"><i class="fas fa-circle-check"></i></div>
+            <h3>Message Sent!</h3>
+            <p>We've opened WhatsApp for you to complete the enquiry. If it didn't open automatically, click below:</p>
+            <a href="${whatsappUrl}" target="_blank" class="btn-primary glossy-btn ripple mt-btn">Open WhatsApp Again</a>
+            <button onclick="location.reload()" class="btn-outline-light glossy-outline mt-btn" style="margin-left: 10px; border-color: rgba(255,255,255,0.2); color: #fff;">Send Another</button>
+          </div>
+        `;
+        form.style.opacity = '1';
+      }, 300);
+    }, 800);
   });
 })();
 
