@@ -112,17 +112,36 @@
 
   // Subtle parallax on hero bg
   const hero = document.querySelector('.hero');
+  const heroContent = document.querySelector('.hero-content');
   if (hero) {
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       if (y < window.innerHeight) {
         slides.forEach(s => {
           s.style.transform = s.classList.contains('active')
-            ? `scale(1) translateY(${y * 0.2}px)`
-            : 'scale(1.05)';
+            ? `scale(1.02) translateY(${y * 0.2}px)`
+            : 'scale(1.1)';
         });
       }
     }, { passive: true });
+
+    // Smooth Mouse Parallax for Hero Content
+    hero.addEventListener('mousemove', (e) => {
+      const { clientX: x, clientY: y } = e;
+      const { innerWidth: w, innerHeight: h } = window;
+      const moveX = (x / w - 0.5) * 30;
+      const moveY = (y / h - 0.5) * 30;
+
+      if (heroContent) {
+        heroContent.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+      }
+    });
+
+    hero.addEventListener('mouseleave', () => {
+      if (heroContent) {
+        heroContent.style.transform = `translate3d(0, 0, 0)`;
+      }
+    });
   }
 })();
 
@@ -405,34 +424,51 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   const cursor = document.querySelector('.cursor');
   const cursorinner = document.querySelector('.cursor2');
   
-  // Make sure it applies the hover effect to links, buttons, and gallery items
-  const interactiveElements = document.querySelectorAll('a, button, .gallery-item, input, textarea');
-
-  // Prevent JS errors if running on mobile where we hide the cursor via CSS
   if (!cursor || !cursorinner) return;
 
-  document.addEventListener('mousemove', function(e) {
-    cursor.style.transform = `translate3d(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%), 0)`;
-    cursorinner.style.left = e.clientX + 'px';
-    cursorinner.style.top = e.clientY + 'px';
+  let mouseX = 0;
+  let mouseY = 0;
+  let cursorX = 0;
+  let cursorY = 0;
+  let innerX = 0;
+  let innerY = 0;
+
+  // Use a smoother lerp for the outer cursor and a faster one for the inner dot
+  const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
   });
 
-  document.addEventListener('mousedown', function() {
+  function animate() {
+    cursorX = lerp(cursorX, mouseX, 0.15);
+    cursorY = lerp(cursorY, mouseY, 0.15);
+    
+    innerX = lerp(innerX, mouseX, 0.45);
+    innerY = lerp(innerY, mouseY, 0.45);
+
+    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+    cursorinner.style.transform = `translate3d(${innerX}px, ${innerY}px, 0) translate(-50%, -50%)`;
+
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+
+  const interactiveElements = document.querySelectorAll('a, button, .gallery-item, input, textarea');
+
+  document.addEventListener('mousedown', () => {
     cursor.classList.add('click');
     cursorinner.classList.add('cursorinnerhover');
   });
 
-  document.addEventListener('mouseup', function() {
+  document.addEventListener('mouseup', () => {
     cursor.classList.remove('click');
     cursorinner.classList.remove('cursorinnerhover');
   });
 
   interactiveElements.forEach(item => {
-    item.addEventListener('mouseover', () => {
-      cursor.classList.add('hover');
-    });
-    item.addEventListener('mouseleave', () => {
-      cursor.classList.remove('hover');
-    });
+    item.addEventListener('mouseover', () => cursor.classList.add('hover'));
+    item.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
 })();
