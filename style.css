@@ -36,12 +36,13 @@
 
 /* ── RESET & BASE ───────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; width: 100%; }
 body {
   font-family: var(--font-sans);
   background: var(--cream);
   color: var(--text);
   overflow-x: hidden;
+  width: 100%;
   line-height: 1.7;
 }
 img { display: block; max-width: 100%; height: auto; }
@@ -388,7 +389,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 @keyframes rotateMotif { 100% { transform: translateY(-50%) rotate(360deg); } }
 
 /* ── HIGHLIGHTS ─────────────────────────────────── */
-.highlights { position: relative; }
+.highlights { position: relative; overflow: hidden; }
 .highlights::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
 .highlights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
 .highlight-card { border-radius: var(--radius); padding: 40px 32px; transition: all var(--transition); position: relative; overflow: hidden; z-index: 1; }
@@ -402,6 +403,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .highlight-card p { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.7; }
 
 /* ── ROOMS ──────────────────────────────────────── */
+.rooms { position: relative; overflow: hidden; }
 .room-split { display: grid; grid-template-columns: 1fr 1.1fr; gap: 70px; align-items: center; margin-bottom: 90px; }
 .room-split:last-of-type { margin-bottom: 0; }
 .room-split.reverse { direction: rtl; }
@@ -478,6 +480,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .lightbox-counter { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.15em; background: rgba(0,0,0,0.5); padding: 8px 20px; border-radius: 100px; backdrop-filter: blur(4px); }
 
 /* ── EXPLORE ────────────────────────────────────── */
+.explore { position: relative; overflow: hidden; }
 .explore-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .explore-card { padding: 32px 24px; transition: all var(--transition); position: relative; z-index: 1; }
 .explore-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.8); box-shadow: 0 15px 35px rgba(19,56,36,0.1); }
@@ -491,6 +494,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .explore-tag { font-size: 0.8rem; font-weight: 700; color: var(--terra); display: flex; align-items: center; gap: 6px; background: rgba(158,74,37,0.05); padding: 6px 12px; border-radius: 6px; width: fit-content; }
 
 /* ── CONTACT ────────────────────────────────────── */
+.contact { position: relative; overflow: hidden; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 70px; margin-bottom: 56px; }
 .info-card { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 24px; transition: all var(--transition); }
 .info-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: translateX(5px); }
@@ -547,7 +551,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .map-wrap:hover iframe { filter: grayscale(0%) contrast(1); }
 
 /* ── FOOTER ─────────────────────────────────────── */
-.footer { background: #080C07; position: relative; border-top: 1px solid rgba(255,255,255,0.05); }
+.footer { background: #080C07; position: relative; border-top: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
 .footer-top { padding: 80px 0 50px; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 60px; }
 .drop-glow { filter: drop-shadow(0 0 15px rgba(255,255,255,0.15)); }
@@ -732,6 +736,7 @@ a, button, .gallery-item, input, textarea {
   .logo-main { font-size: 1.1rem; }
   .logo-sub { font-size: 0.55rem; }
   .hero-logo { width: 190px; height: 115px; margin-bottom: 24px; }
+  .footer-links ul{ display: grid; grid-template-columns: repeat(3, 1fr);}
   .hero-logo img { width: 160px; }
   .nav-links { display: none; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(12,18,11,0.95); backdrop-filter: blur(20px); justify-content: center; align-items: center; gap: 16px; z-index: 999; }
   .nav-links.open { display: flex; }
@@ -770,4 +775,9 @@ a, button, .gallery-item, input, textarea {
     width: 44px; 
     height: 44px; 
   }
+}
+
+.footer-contact {
+    display: flex;
+    flex-direction: column;
 }
