@@ -221,6 +221,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
+#navbar.nav-open {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: none !important;
+}
 .nav-container {
   max-width: 1200px; margin: 0 auto; padding: 0 24px;
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
@@ -726,8 +731,8 @@ a, button, .gallery-item, input, textarea {
   .nav-brand { gap: 10px; }
   .logo-main { font-size: 1.1rem; }
   .logo-sub { font-size: 0.55rem; }
-  .hero-logo { width: 100px; height: 100px; margin-bottom: 24px; }
-  .hero-logo img { width: 75px; }
+  .hero-logo { width: 190px; height: 115px; margin-bottom: 24px; }
+  .hero-logo img { width: 160px; }
   .nav-links { display: none; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(12,18,11,0.95); backdrop-filter: blur(20px); justify-content: center; align-items: center; gap: 16px; z-index: 999; }
   .nav-links.open { display: flex; }
   .nav-link { font-size: 1.3rem; padding: 12px 24px; }

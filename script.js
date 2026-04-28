@@ -65,6 +65,7 @@
     hamburger.addEventListener('click', () => {
       const isOpen = navLinks.classList.toggle('open');
       hamburger.classList.toggle('open', isOpen);
+      navbar.classList.toggle('nav-open', isOpen);
       hamburger.setAttribute('aria-expanded', isOpen);
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
@@ -74,6 +75,7 @@
       link.addEventListener('click', () => {
         navLinks.classList.remove('open');
         hamburger.classList.remove('open');
+        navbar.classList.remove('nav-open');
         hamburger.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
       });
